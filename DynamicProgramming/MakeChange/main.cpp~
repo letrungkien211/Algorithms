@@ -12,7 +12,7 @@
 
 using namespace std;
 
-#define For(i,m,n) for(int i=m; i < n; i++)
+#define For(i,m,n) for(i=m; i < n; i++)
 
 int main(int argc, char** argv){
 

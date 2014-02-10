@@ -1,0 +1,120 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><script language="JavaScript">
+<!--
+  function win(fileName) {
+    myWin = window.open("","myWindow","resizable=yes,scrollbars=no,status=no,width=0,height=0,bgcolor=ffffff");
+    myWin.document.write("<body bgcolor=#ffffff>");
+    myWin.document.write( "<OBJECT CLASSID=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\"" );
+    myWin.document.write( "CODEBASE=\"http://active.macromedia.com/flash4/cabs/swflash.cab#version=4,0,0,0\"" );
+    myWin.document.write( "ID=navmovie WIDTH=100% HEIGHT=100%> " );
+    myWin.document.write( "<PARAM NAME=\"movie\" VALUE=\""+ fileName + "\">" ); 
+    myWin.document.write( "<PARAM NAME=\"play\" VALUE=\"true\">" );
+    myWin.document.write( "<PARAM NAME=\"quality\" VALUE=\"high\">" ); 
+    myWin.document.write( "<PARAM NAME=\"loop\" VALUE=\"false\">" ); 
+    myWin.document.write( "<EMBED NAME=navmovie SRC=" + fileName +" WIDTH=100% HEIGHT=100% PLAY=true LOOP=false" );
+    myWin.document.writeln( "SWLIVECONNECT=true QUALITY=high> </OBJECT> </body>" );
+    myWin.document.close(); 
+  }
+//-->
+</script>
+
+
+<title>Dynamic Programming Practice Problems</title>
+</head>
+
+<body><h2>Dynamic Programming Practice Problems</h2> <p>This site contains
+an old collection of practice dynamic programming problems and their
+animated solutions that I put together many years ago while serving as
+a TA for the undergraduate algorithms course at MIT.  I am keeping it
+around since it seems to have attracted a reasonable following on the
+web. Eventually, this animated material will be updated and
+incorporated into an algorithms textbook I am writing.
+-- <a href="http://www.cs.clemson.edu/%7Ebcdean/">Brian Dean</a> </p>
+
+<p>To view the solution to one of the problems below, click on its
+title.  To view the solutions, you'll need a machine which can view
+Macromedia Flash animations and which has audio output.  I have also
+included a short review animation on how to solve
+the <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_0.swf">integer knapsack problem</a>
+(with multiple copies of items allowed) using dynamic programming.
+
+</p><hr>
+
+<h3>Problems: </h3>
+<ol compact="compact">
+
+<li value="1"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_1.swf">Maximum Value Contiguous Subsequence</a>.  Given a
+sequence of n real numbers A(1) ... A(n), determine a contiguous
+subsequence A(i) ... A(j) for which the sum of elements in the
+subsequence is maximized. 
+
+</li><li value="2"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_2.swf">Making Change</a>.  You are given n types of coin
+denominations of values v(1) &lt; v(2) &lt; ... &lt; v(n) (all integers).
+Assume v(1) = 1, so you can always make change for any amount of money
+C.  Give an algorithm which makes change for an amount of money C with
+as few coins as possible. [on problem set 4]
+
+</li><li value="3"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_3.swf">Longest Increasing Subsequence</a>.  Given a sequence of n
+real numbers A(1) ... A(n), determine a subsequence (not necessarily
+contiguous) of maximum length in which the values in the subsequence
+form a strictly increasing sequence. [on problem set 4]
+
+</li><li value="4"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_5.swf">Box Stacking</a>. You are given a set of n types of
+rectangular 3-D boxes, where the i^th box has height h(i), width
+w(i) and depth d(i) (all real numbers).  You want to create a stack
+of boxes which is as tall as possible, but you can only stack a box on
+top of another box if the dimensions of the 2-D base of the lower box
+are each strictly larger than those of the 2-D base of the higher box.
+Of course, you can rotate a box so that any side functions as its
+base.  It is also allowable to use multiple instances of the same
+type of box. 
+
+</li><li value="5"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_6.swf">Building Bridges</a>.  Consider a 2-D map with a
+horizontal river passing through its center.  There are n cities on
+the southern bank with x-coordinates a(1) ... a(n) and n cities
+on the northern bank with x-coordinates b(1) ... b(n).  You want
+to connect as many north-south pairs of cities as possible with
+bridges such that no two bridges cross.  When connecting cities, you
+can only connect city i on the northern bank to city i on the southern
+bank. (Note: this problem was incorrectly stated on the paper copies
+of the handout given in recitation.) 
+
+</li><li value="6"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_7.swf">Integer Knapsack Problem (Duplicate Items
+Forbidden)</a>. This is the same problem as the example above, except here it
+is forbidden to use more than one instance of each type of item. 
+
+</li><li value="7"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_4.swf">Balanced Partition</a>. You have a set of n integers
+each in the range 0 ... K.  Partition these integers into two
+subsets such that you minimize |S1 - S2|, where S1 and S2
+denote the sums of the elements in each of the two subsets. 
+
+</li><li value="8"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_8.swf">Edit Distance</a>. Given two text strings A of length
+n and B of length m, you want to transform A into B with a
+minimum number of operations of the following types: delete a
+character from A, insert a character into A, or change some
+character in A into a new character.  The minimal number of such operations
+required to transform A into B is called the edit distance between
+A and B. 
+
+</li><li value="9"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_9.swf">Counting Boolean Parenthesizations</a>. You are given a
+boolean expression consisting of a string of the symbols 'true',
+'false', 'and', 'or', and 'xor'.  Count the number of ways to
+parenthesize the expression such that it will evaluate to true.  For
+example, there are 2 ways to parenthesize 'true and false xor true'
+such that it evaluates to true. 
+
+</li><li value="10"> <a href="http://people.cs.clemson.edu/%7Ebcdean/dp_practice/dp_10.swf">Optimal Strategy for a Game</a>. Consider a row of
+n coins of values v(1) ... v(n), where n is even.  We play a
+game against an opponent by alternating turns.  In each turn, a player
+selects either the first or last coin from the row, removes it from
+the row permanently, and receives the value of the coin.  Determine the
+maximum possible amount of money we can definitely win if we move
+first. 
+
+</li></ol>
+
+
+
+
+
+</body></html>
