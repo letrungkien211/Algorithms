@@ -1,0 +1,93 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+
+using namespace std;
+
+typedef long long ll;
+typedef tuple < int, int, int, ll > quadr;
+typedef vector < quadr > vquadr;
+
+ll
+getMissed(vquadr &nodes, int cnt)
+{
+    ll sum = 0LL;
+    for (int i = 0; i <= cnt; ++i) {
+        sum += get< 1 >(nodes[i]);
+    }
+    ll res = 0LL;
+    vquadr tmp(nodes.begin(), nodes.begin() + cnt + 1);
+    vector < int > times;
+    for (vquadr::iterator it = tmp.begin(); it != tmp.end(); ++it) {
+        times.push_back(get< 0 >(*it));
+        times.push_back(get< 2 >(*it));
+    }
+    sort(times.begin(), times.end());
+    times.resize(unique(times.begin(), times.end()) - times.begin());
+    for (vector< int >::iterator it = times.begin(); it + 1 != times.end(); ++it) {
+        int from = *it, to = *(it + 1);
+        int avail = to - from;
+        while (avail) {
+            int ind = -1;
+            int lastEnd = 0;
+            for (int i = 0; i <= cnt; ++i) {
+                int beg, end, cnt;
+                tie(beg, cnt, end, ignore) = tmp[i];
+                if (!cnt || beg >= to || end <= from) {
+                    continue;
+                }
+                if (ind == -1 || lastEnd > end) {
+                    lastEnd = end;
+                    ind = i;
+                }
+            }
+            if (ind == -1) {
+                break;
+            }
+            int add = min(avail, get< 1 >(tmp[ind]));
+            get< 1 >(tmp[ind]) -= add;
+            avail -= add;
+            res += add;
+        }
+    }
+    return (sum - res);
+}
+
+void
+process()
+{
+    ll ans = 0LL;
+    int n;
+    cin >> n;
+    vquadr orders;
+    for (int i = 0; i < n; ++i) {
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        orders.push_back(make_tuple(a, b, c, ll(d)));
+    }
+    stable_sort(orders.begin(), orders.end(), []
+		(const quadr &a, const quadr &b) -> bool
+		{
+		    return (get< 3 >(a) > get< 3 >(b));
+		}
+	);
+    for (int i = 0; i < n; ++i) {
+        ll left4dead = getMissed(orders, i);
+        ans += left4dead * get< 3 >(orders[i]);
+        get< 1 >(orders[i]) -= left4dead;
+    }
+    cout << ans << '\n';
+}
+
+int
+main(int argc, char **argv)
+{
+    ios_base::sync_with_stdio(false);
+    int t;
+    cin >> t;
+    for (; t; --t) {
+        process();
+    }
+    return 0;
+}

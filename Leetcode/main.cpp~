@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+
+#include <vector>
+#include <map>
+#include <list>
+#include <algorithm>
+#include <set>
+#include <unordered_map>
+
+
+using namespace std;
+
+#define For(i,m,n) for(int i=m; i < n; i++)
+
+class Key
+{
+public: 
+    int x,y;
+    Key(int x_, int y_) : x(x_), y(y_){}
+    bool operator<(const Key& k) const{
+	if(this->x < k.x)
+	    return true;
+	else if(this->x>k.x)
+	    return false;
+	else if(this->y<k.y)
+	    return true;
+	else
+	    return false;
+    }
+};
+
+
+class KeyHash{
+public:
+    size_t operator()(const Key &k) const{
+        return k.x * 100 + k.y;
+    }
+};
+
+struct KeyEquals : binary_function<const Key&, const Key&, bool> {
+    result_type operator()( first_argument_type lhs, second_argument_type rhs ) const
+	{
+	    return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+	}
+};     
+
+
+
+class Solution {
+public:
+    unordered_map<Key,string, KeyHash, KeyEquals> r;
+    int n;
+
+    string longestPalindrome(string s) {
+	n = s.size();
+	if(n==1)
+	    return s;
+	For(i,0,n){
+	    for(int j = i; j>=0; j--){
+		r[Key(j,i)] = "";
+		string &rji = r[Key(j,i)];
+		if(j==i){
+		    rji = s[i];
+		}
+		else{
+		    if(s[i]==s[j]){
+			if(j+1==i){
+			    rji+= s[i];
+			    rji+= s[i];
+			}
+			else{
+			    rji+=s[i];
+			    rji+=r[Key(j+1,i-1)];
+			    rji+=s[i];
+			}
+		    }
+		    else{
+			string a = r[Key(j+1,i)];
+			string b = r[Key(j,i-1)];
+			    if(a.size()>b.size())
+				rji = a;
+			    else
+				rji = b;
+		    }
+		}
+	    }
+	}
+	return r[Key(0,n-1)];
+    }
+};
+
+
+int main(int argc, char** argv){
+    string s1("lcnvoknqgejxbfhijmxglisfzjwbtvhodwummdqeggzfczmetrdnoetmcydwddmtubcqmdjwnpzdqcdhplxtezctvgnpobnnscrmeqkwgiedhzsvskrxwfyklynkplbgefjbyhlgmkkfpwngdkvwmbdskvagkcfsidrdgwgmnqjtdbtltzwxaokrvbxqqqhljszmefsyewwggylpugmdmemvcnlugipqdjnriythsanfdxpvbatsnatmlusspqizgknabhnqayeuzflkuysqyhfxojhfponsndytvjpbzlbfzjhmwoxcbwvhnvnzwmkhjxvuszgtqhctbqsxnasnhrusodeqmzrlcsrafghbqjpyklaaqximcjmpsxpzbyxqvpexytrhwhmrkuybtvqhwxdqhsnbecpfiudaqpzsvfaywvkhargputojdxonvlprzwvrjlmvqmrlftzbytqdusgeupuofhgonqoyffhmartpcbgybshllnjaapaixdbbljvjomdrrgfeqhwffcknmcqbhvulwiwmsxntropqzefwboozphjectnudtvzzlcmeruszqxvjgikcpfclnrayokxsqxpicfkvaerljmxchwcmxhtbwitsexfqowsflgzzeynuzhtzdaixhjtnielbablmckqzcccalpuyahwowqpcskjencokprybrpmpdnswslpunohafvminfolekdleusuaeiatdqsoatputmymqvxjqpikumgmxaxidlrlfmrhpkzmnxjtvdnopcgsiedvtfkltvplfcfflmwyqffktsmpezbxlnjegdlrcubwqvhxdammpkwkycrqtegepyxtohspeasrdtinjhbesilsvffnzznltsspjwuogdyzvanalohmzrywdwqqcukjceothydlgtocukc");
+
+    string s2("abacca");
+    string s3("ccd");
+    string s4("a");
+    string s5("bb");
+    Solution sol;
+    string w= sol.longestPalindrome(s1);
+    cout << w <<endl;
+    if(argc>1)
+	w = sol.longestPalindrome(argv[1]);
+    cout << w <<endl;
+    return 0;
+}
