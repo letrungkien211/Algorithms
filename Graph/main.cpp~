@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+
+#include <vector>
+#include <map>
+#include <list>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <stack>
+#include "graph.hpp"
+
+using namespace std;
+
+
+#define For(i,m,n) for(int i=m; i < n; i++)
+
+vector<bool> discovered;
+vector<bool> processed;
+
+
+list<int> DFS(const Graph &g){
+    int start = 0;
+    stack<int> open;
+    list<int> close;
+
+    discovered.resize(g.V);
+    processed.resize(g.V);
+    fill(discovered.begin(), discovered.end(),false);
+
+    open.push(start);
+    discovered[start]=true;
+    while(!open.empty()){
+	int v = open.top();
+	open.pop();
+	if(!g.adj[v].empty()){
+	    for(int w:g.adj[v]){
+		if(!discovered[w]){
+		    open.push(w);
+		    discovered[w] = true;
+		}
+	    }
+	}
+	close.push_back(v);
+    }
+    return close;
+}
+
+list<int> BFS(const Graph &g){
+    int start = 0;
+    queue<int> open;
+    list<int> close;
+
+    discovered.resize(g.V);
+    processed.resize(g.V);
+    fill(discovered.begin(), discovered.end(),false);
+    fill(processed.begin(), processed.end(),false);
+
+    open.push(start);
+    discovered[start]=true;
+    while(!open.empty()){
+	vector<int> tmp;
+	while(!open.empty()){
+	    int v = open.front();
+	    tmp.push_back(v);
+	    open.pop();
+
+	}
+
+	for(int v:tmp){
+	    if(!g.adj[v].empty()){
+		for(int w:g.adj[v]){
+		    if(!discovered[w]){
+			open.push(w);
+			discovered[w] = true;
+		    }
+		}
+	    }
+	    processed[v]=true;
+	    close.push_back(v);
+	}
+    }
+    return close;
+}
+
+
+
+int main(int argc, char** argv){
+    vector<int> starts{1,1,1,4,2,2};
+    vector<int> ends{2,3,4,6,3,5};
+
+    Graph g(starts.size());
+    g.addEdge(starts,ends);
+    
+    cout << g.V <<endl;
+    int dummy;
+    list<int> bfs_result = BFS(g);
+    list<int> dfs_result = DFS(g);
+    cout << "BFS: " ;
+    for(int i : bfs_result) 	cout << i << " ";
+
+    cout << endl;
+    cout << "DFS: " ;
+    for(int i : dfs_result) 	cout << i << " ";
+
+
+    return 0;
+}

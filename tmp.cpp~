@@ -1,0 +1,93 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<set>
+#include <map>
+#include <queue>
+#include<unordered_set>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <limits>
+#include <unordered_map>
+#include<unordered_set>
+using namespace std;
+
+
+struct Point {
+      int x;
+      int y;
+      Point() : x(0), y(0) {}
+      Point(int a, int b) : x(a), y(b) {}
+};
+ 
+ #define INF numeric_limits<double>::max()
+#define SMALL 0.0000001
+
+hash<double> hash_double;
+hash<int> hash_int;
+
+struct Line{
+    double r,theta;
+    Line(double distance=0, double slope=0):r(distance),theta(slope){}
+    bool operator==(const Line &other)const{
+        return (r==other.r) && (fabs(theta-other.theta)<SMALL);
+    }
+};
+
+struct hashLine{
+    size_t operator()(const Line &l) const{
+        return hash_double(l.r)^hash_double(l.theta);
+    }
+};
+
+struct hashPoint{
+    size_t operator()(const Point &p) const{
+        return hash_int(p.x)^hash_int(p.y);
+    }
+};
+
+
+double pi = 3.1415926535897;
+class Solution {
+public:
+    
+    int maxPoints(vector<Point> &points) {
+        unordered_map<Line,unordered_set<int>,hashLine> count;
+        int n = points.size();
+        if(n<=2) return n;
+        
+        unordered_map<Point,int,hashPoint> countEach;
+        for(int i=0; i<n; i++){
+            if(countEach.find(points[i])==countEach.end())
+                countEach[points[i]]=1;
+            else
+                countEach[points[i]]++;
+            for(int j=i+1;j<n; j++){
+                double dx = points[i].x-points[j].x, dy =points[i].y-points[j].y;
+                double theta = dy ? atan(dx/dy) : pi/2;
+                double r = points[i].x*cos(theta)+points[i].y*sin(theta);
+                Line l(r,theta);
+                count[l].insert(i);
+                count[l].insert(j);
+            }
+        }
+        
+        int maxP = 0;
+        for(auto i:count){
+            int size = 0;
+            for(auto j:i.second){
+                size+=countEach[points[j]];
+            }
+            maxP=max(maxP,size);
+        }
+        return maxP;
+    }
+};
+
+int main(int argc, char** argv){
+	Solution sol;
+	vector<Point> points{{0,0},{-1,-1},{2,2}};
+	sol.maxPoints(points);
+	return 0;
+}
