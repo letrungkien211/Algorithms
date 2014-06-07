@@ -14,36 +14,50 @@
 #include<sstream>
 #include<cassert>
 #include <stack>
+#include<string>
+
 using namespace std;
-//using namespace std;
-class Solution {
-public:
-    string convert(string s, int nRows) {
-        int len = s.size();
-        int level=0;
-        string ret;
-        ret.resize(s.size());
-        if(nRows==1) return s;
-        int cnt=0;
-        while(level<nRows){
-			int num = 2*(nRows-1);
-            for(int i=0; i<len; i+=num){				
-                for(int j=i+level;j<=i+num; j+=num-2*level){					
-                    ret[cnt++]=s[j];
-					if(num==2*level)
-						break;
-                }
-                if(!num)
-                    break;				
-            }			
-            level++;
-        }
-        return ret;
-    }
-};
+
+vector<int> LIS(vector<int>& A){
+	int n = A.size();
+	if(n<=1) return A;
+	vector<int> dp(n,0);
+	vector<int> pre(n,0);
+	int maxindex=0;
+	int maxlen=0;
+	for(int i=0; i<n; i++){
+		dp[i]=1;
+		pre[i]=-1;
+		for(int k=0; k<i; k++){
+			if(A[k]<A[i]){
+				if(dp[i]<1+dp[k]){
+					pre[i]=k;
+					dp[i]=1+dp[k];
+				}				
+			}
+		}
+		if(dp[i]>maxlen){
+			maxlen=dp[i];
+			maxindex=i;
+		}
+	}
+	vector<int> ret(maxlen);
+	for(int i=maxlen-1; i>=0; i--){
+		ret[i]=A[maxindex];
+		maxindex=pre[maxindex];
+	}
+	return ret;
+}
+
 int main(int argc, char** argv){
-    Solution sol;
-	string s = "AB";
-	cout << sol.convert(s,1) <<endl;
+	srand(time(NULL));
+	vector<int> A(1000);
+	for(auto &a:A){
+		a = rand()%1000;
+		cout << a << " ";
+	}
+	cout <<endl;
+	vector<int> ret = LIS(A);
+	for(auto a:ret) cout << a << " "; cout <<endl;
     return 0;
 }
