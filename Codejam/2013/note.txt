@@ -1,0 +1,6 @@
+1. Common problems
+   1.1 CSP: Backtrack
+   1.2 Search: A* (BFS or DFS can work in small scale)
+   1.3 Graph: Shortest path, path existence (search)
+   1.4 Greedy Algorithm
+   

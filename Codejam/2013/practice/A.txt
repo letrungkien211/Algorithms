@@ -1,0 +1,100 @@
+Case #1: 3
+Case #2: 3
+Case #3: Too Bad
+Case #4: 6
+Case #5: Too Bad
+Case #6: Too Bad
+Case #7: Too Bad
+Case #8: Too Bad
+Case #9: 9
+Case #10: Too Bad
+Case #11: 2
+Case #12: Too Bad
+Case #13: Too Bad
+Case #14: Too Bad
+Case #15: Too Bad
+Case #16: Too Bad
+Case #17: Too Bad
+Case #18: Too Bad
+Case #19: Too Bad
+Case #20: Too Bad
+Case #21: Too Bad
+Case #22: Too Bad
+Case #23: Too Bad
+Case #24: Too Bad
+Case #25: Too Bad
+Case #26: Too Bad
+Case #27: 7
+Case #28: 4
+Case #29: Too Bad
+Case #30: 7
+Case #31: Too Bad
+Case #32: Too Bad
+Case #33: 10
+Case #34: Too Bad
+Case #35: Too Bad
+Case #36: Too Bad
+Case #37: 6
+Case #38: Too Bad
+Case #39: Too Bad
+Case #40: Too Bad
+Case #41: Too Bad
+Case #42: 7
+Case #43: Too Bad
+Case #44: 18
+Case #45: 7
+Case #46: Too Bad
+Case #47: 2
+Case #48: Too Bad
+Case #49: Too Bad
+Case #50: Too Bad
+Case #51: Too Bad
+Case #52: Too Bad
+Case #53: 3
+Case #54: Too Bad
+Case #55: Too Bad
+Case #56: Too Bad
+Case #57: Too Bad
+Case #58: 4
+Case #59: 13
+Case #60: Too Bad
+Case #61: Too Bad
+Case #62: Too Bad
+Case #63: 2
+Case #64: Too Bad
+Case #65: 4
+Case #66: Too Bad
+Case #67: 2
+Case #68: 5
+Case #69: Too Bad
+Case #70: Too Bad
+Case #71: Too Bad
+Case #72: 1
+Case #73: Too Bad
+Case #74: Too Bad
+Case #75: Too Bad
+Case #76: Too Bad
+Case #77: Too Bad
+Case #78: Too Bad
+Case #79: Too Bad
+Case #80: Too Bad
+Case #81: 4
+Case #82: Too Bad
+Case #83: Too Bad
+Case #84: Too Bad
+Case #85: Too Bad
+Case #86: Too Bad
+Case #87: Too Bad
+Case #88: Too Bad
+Case #89: Too Bad
+Case #90: 8
+Case #91: Too Bad
+Case #92: Too Bad
+Case #93: Too Bad
+Case #94: Too Bad
+Case #95: Too Bad
+Case #96: Too Bad
+Case #97: 6
+Case #98: Too Bad
+Case #99: 7
+Case #100: 10

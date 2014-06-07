@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Data{
+public:
+    int price;
+    int index;
+};
+
+int myfind(const vector<Data> &P, int min, int max, int value){
+    int result = -1;
+
+
+    if(value == P
+}
+
+int main(int argc, char **argv){
+    string inputFileName(argv[1]);
+    string outputFileName(argv[2]);
+
+    ifstream input(inputFileName.c_str());
+    ofstream output(outputFileName.c_str());
+    int N, C, I;
+    vector<Data> P;
+    input >> N;
+    for(int i = 0; i < N; i++){
+	input >> C;
+	input >> I;
+	P.resize(I);
+	for(int j = 0; j< I; j++){
+	    input >> P[j].price;
+	    P[j].index = j+1;
+	}
+	sort(P.begin(), P.end());
+	for(int j = 0; j<I; j++){
+	    int tmp = myfind(P, I, C-P[j].price);
+	    if(tmp!=-1){
+		output << "Case #"<<i+1<<": " << P[j].index << " " << (*tmp).index << endl;
+		break;
+	    }
+	}
+    }
+    
+    return 0;
+}
