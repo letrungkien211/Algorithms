@@ -2,17 +2,22 @@
 #include<vector>
 #include<fstream>
 #include<list>
+#include<sstream>
+#include<ctime>
+#include<set>
+#include<functional>
 #include<algorithm>
-#include<cassert>
 #include<limits>
-using namespace std;
+#include<cassert>
 
-#define Pair pair<long,int>
+using namespace std;
+#define Pair pair<double,int>
+
 
 struct Edge{
     int from,to;
-    long weight;
-    Edge(int x=-1, int y=-1, long w=-1): from(x), to(y), weight(w){}
+    double weight;
+    Edge(int x=-1, int y=-1, double w=-1): from(x), to(y), weight(w){}
 };
 
 class MinPQ{
@@ -20,8 +25,8 @@ private:
     Pair *data;
     int* mapindex;
     int MAX;
-public:
     int size;
+public:
     MinPQ():size(0),MAX(0),data(NULL),mapindex(NULL){      
     }
     ~MinPQ(){
@@ -102,72 +107,91 @@ public:
     }
 };
 
+
+
 class Graph{
 public:
     int V;
     int E;
-    vector<list<Edge> > Adj;    
-    Graph(){
-    }
-    void ReadFromFile(string filename){
-	ifstream fin(filename);	
-	fin >> V >> E;
+    vector<list<Edge> > Adj;
+    
+    Graph(int numVertex){
+	V = numVertex;
+	E = 0;
 	Adj.resize(V);
-	Edge e;
-	for(int i=0; i<E; i++){
-	    fin >> e.from >> e.to >> e.weight;	    
-	    e.from--;
-	    e.to--;
-	    Adj[e.from].push_back(e);
-	    swap(e.from,e.to);
-	    Adj[e.from].push_back(e);
-	}
-	fin.close();
-    }    
-};
+    }
 
-#define INF numeric_limits<long>::max()
-
-class Prim{
-public:
-    long MinTree(const Graph &G){
-	vector<long> distanceTo(G.V, INF);
-	long ret=0;
-	vector<bool> inTree(G.V,false);
-	int start=0;
-	inTree[start]=true;
-	MinPQ pq;
-	pq.init(G.V);
-	for(auto e:G.Adj[start]){
-	    pq.push(Pair(e.weight, e.to));
-	    distanceTo[e.to]=e.weight;
-	}
-	while(!pq.empty()){
-	    Pair curr = pq.pop();
-	    if(inTree[curr.second])
-		continue;
-	    ret+=curr.first;
-	    inTree[curr.second]=true;
-	    for(auto e:G.Adj[curr.second]){
-		if(inTree[e.to] || e.weight >= distanceTo[e.to])
+    void ReadFromFile(string filename){
+	ifstream input(filename);
+	char line[1000];
+	while(input.good()){
+	    input.getline(line,1000);	    
+	    stringstream ss(line);
+	    int from;
+	    ss >> from;
+	    from--;
+	    while(ss.good()){
+		int to=-1, weight=-1;
+		ss >> to >> weight;
+		if(to==-1 || weight==-1)
 		    continue;
-		int index = pq.find(e.to);
-		if(index==-1)
-		    pq.push(Pair(e.weight,e.to));
-		else
-		    pq.decrease(Pair(e.weight,e.to), index);
-		distanceTo[e.to] = e.weight;
+		to--;
+		Adj[from].push_back(Edge(from,to,weight));
+		E++;
 	    }
 	}
-	return ret;
     }    
 };
 
+#define INF 1000000
+
+class Dijkstra{
+public:
+    vector<double> distanceTo;
+    void ShortestPath(Graph &G, int source = 0){
+	distanceTo = vector<double>(G.V,INF);
+	vector<bool> closed(G.V, false);
+	MinPQ open;
+	distanceTo[source]=0.0;
+	open.init(G.V);
+	open.push(Pair(0.0, source));
+
+	while(!open.empty()){
+	    Pair curr = open.pop();
+	    int from = curr.second;
+	    closed[from]=true;
+	    for(auto e:G.Adj[from]){
+		int to = e.to;
+		if(closed[to]){
+		    continue;
+		}
+		double dis = e.weight + distanceTo[from];
+		if(dis < distanceTo[to]){
+		    int index = open.find(to);
+		    if(index==-1)
+			open.push(Pair(dis,to));
+		    else
+			open.decrease(Pair(dis,to), index);
+		    distanceTo[to] = dis;
+		}
+	    }
+	}
+    }
+};
+
+
 int main(int argc, char** argv){
-    Graph g;
-    Prim prim;
-    g.ReadFromFile(argv[1]);
-    cout << prim.MinTree(g)<<endl;
+    Graph G(200);
+    G.ReadFromFile("dijkstraData.txt");
+    cout << G.E<<endl;
+    Dijkstra dijk;
+    dijk.ShortestPath(G);
+    
+    vector<int> vertices{7,37,59,82,99,115,133,165,188,197};
+    for(auto v : vertices){
+	cout << dijk.distanceTo[v-1] <<",";
+    }
+    cout << endl;
+    
     return 0;
 }
-
