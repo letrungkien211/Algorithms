@@ -10,125 +10,87 @@
 
 using namespace std;
 
-#define INF numeric_limits<long>::max()
-
-class Edge{
+class Item{
 public:
-    int from, to;
-    double weight;
+    long value,weight;
 };
 
-class Graph{
+class Knapsack{
 public:
-    int V;
-    int N;
-    vector<string> vertices;
-    Graph(){
-    }
+    long N,W;
+    vector<Item> items;
+    vector<unordered_map<long,long>> memo;
     void ReadFromFile(string filename){
-	ifstream fin(filename);	
-	fin >> V >> N;
-	vertices.resize(V);
-	int tmp;
-	for(int i=0; i<V; i++){
-	    vertices[i].resize(N);
-	    for(int j=0; j<N; j++){
-		fin >> tmp;
-		vertices[i][j] = tmp == 1 ?'1':'0';
-	    }
+	ifstream fin(filename);
+	fin >> W >> N;
+	items.resize(N+1);
+	for(long i=1; i<=N; i++){
+	    fin >> items[i].value >> items[i].weight;
 	}
 	fin.close();
-    }    
-};
-
-class UnionFind{
-public:
-    vector<int> data;
-    int size;
-    UnionFind(int num=0){
-	Init(num);
-    }
-    void Init(int num){
-	size = num;
-	data.resize(num);
-	fill(data.begin(), data.end(),-1);
-    }
-    
-    int Find(int x){
-	if(data[x]<0){
-	    return x;
-	}
-	else{
-	    data[x] = Find(data[x]);
-	    return data[x];
-	}
     }
 
-    void Union(int x, int y){
-	if(data[x] < data[y]){
-	    data[x]+=data[y];
-	    data[y]=x;
-	}
-	else{
-	    data[y]+=data[x];
-	    data[x]=y;
-	}
-	size--;
+    void Preprocess(){
+	memo.resize(N);
+	sort(items.begin(),items.end(),[](Item x, Item y) -> bool {
+		return x.weight < y.weight;
+	    });
     }
-};
 
-class Solution : public Graph{
-public:
-    void Flip(char& c){
-	c = c=='1' ?'0' : '1';
-    }
-    unordered_map<string,int> hashmap;
-    UnionFind uf;    
-    int Cluster(){
-	uf.Init(V);
-	for(int i=0; i<V; i++){
-	    hashmap.insert(pair<string,int>(vertices[i],i));
-	}
-	cout << hashmap.size() <<endl;
-	for(int i=0; i<V; i++){
-	    string tmp = vertices[i];
-	    Check(tmp,i);
-	    for(int j =0; j<N; j++){
-		Flip(tmp[j]);
-		Check(tmp,i);
-		for(int k=j; k<N; k++){
-		    Flip(tmp[k]);
-		    Check(tmp,i);
-		    Flip(tmp[k]);
+    long Solve(){
+	vector<vector<long> > dp(N+1,vector<long>(W+1,0));
+	long ret = -1;
+	for(long i=1; i<=N; i++){
+	    for(long j=1; j<=W; j++){
+		dp[i][j] = dp[i-1][j];
+		if(j>=items[i].weight){
+		    dp[i][j]=max(dp[i][j],dp[i-1][j-items[i].weight]+items[i].value);
 		}
-		Flip(tmp[j]);
+		ret = max(ret,dp[i][j]);
 	    }
 	}
-	return uf.size;
+	return ret;
+    }
+
+    long Solve1(){
+	vector<long> dp(W+1,0);
+	vector<long> tmp;
+	long ret = -1;
+	for(long i=1; i<=N; i++){
+	    tmp=dp;
+	    for(long j=1; j<=W; j++){
+		if(j>=items[i].weight){
+		    dp[j]=max(dp[j],tmp[j-items[i].weight]+items[i].value);
+		}
+		ret = max(ret,dp[j]);
+	    }
+	}
+	return ret;
     }
     
-    void Check(string str, int i){
-	auto it = hashmap.find(str);
-	if(it!=hashmap.end()){
-	    int x = uf.Find(i);
-	    int y = uf.Find(it->second);
-	    if(x!=y){
-		uf.Union(x,y);
+    long Solve2(int n, int w){
+	if(n<0 || w<=0)
+	    return 0;
+	if(memo[n].find(w)==memo[n].end()){
+	    long tmp;
+	    tmp=Solve2(n-1,w);
+	    if(w>=items[n].weight){
+		tmp=max(tmp,Solve2(n-1,w-items[n].weight)+items[n].value);
 	    }
+	    memo[n][w]=tmp;
 	}
-
+	return memo[n][w];
     }
 };
 
 int main(int argc, char** argv){
-    Solution sol;
     clock_t start = clock();
-    cout << "Start reading" <<endl;
-    sol.ReadFromFile(argv[1]);
-    cout << sol.vertices[199999] <<endl;
-    cout << "Start clustering" <<endl;
-    cout << sol.Cluster() <<endl;
-
+    Knapsack kp;
+    kp.ReadFromFile(argv[1]);
+    kp.Preprocess();
+    cout << kp.Solve2(kp.N-1,kp.W) <<endl;
+    cout << "Elapsed time: " << ((double)clock()-(double)start)/(double)CLOCKS_PER_SEC <<endl;
+    cout << kp.Solve1() <<endl;    
     cout << "Elapsed time: " << ((double)clock()-(double)start)/(double)CLOCKS_PER_SEC <<endl;
     return 0;
 }
