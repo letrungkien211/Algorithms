@@ -1,0 +1,78 @@
+#include<iostream>
+#include<vector>
+#include<fstream>
+#include<list>
+#include<algorithm>
+#include<bitset>
+#include<string>
+#include<unordered_map>
+#include<ctime>
+
+using namespace std;
+
+#define INF numeric_limits<double>::max()
+
+class Edge{
+public:
+    int from, to;
+    double weight;
+};
+
+class Graph{
+public:
+    int V;
+    int E;
+    vector<Edge> EdgeList;
+    Graph(){
+    }
+    void ReadFromFile(string filename){
+	ifstream fin(filename);	
+	fin >> V >> E;
+	EdgeList.resize(E);
+	for(int i=0; i<E; i++){
+	    fin >> EdgeList[i].from >> EdgeList[i].to >> EdgeList[i].weight;	    
+	    EdgeList[i].from--;
+	    EdgeList[i].to--;
+	}
+	fin.close();
+    }    
+};
+
+class Floyd:public Graph{
+public:
+    double Solve(){
+	vector<vector<vector<double> > > dp(V,vector<vector<double>>(V,vector<double>(V,INF)));
+	for(int i=0; i<V; i++){
+	    dp[i][i][0]=0;
+	}
+	for(auto e:EdgeList){
+	    dp[e.from][e.to][0]=e.weight;
+	}
+	double minMin = INF;
+	for(int k=1; k<V; k++){
+	    for(int i=0; i<V; i++){
+		for(int j=0; j<V; j++){
+		    dp[i][j][k]= min(dp[i][j][k-1], dp[i][k][k-1] + dp[k][j][k-1]);
+		    minMin = min(minMin,dp[i][j][k]);
+		}
+	    }
+	    cout << k <<"/" << V << endl;
+	}
+
+	for(int i=0; i<V; i++){
+	    if(dp[i][i][V-1]<0)
+		return -INF;
+	}
+	return minMin;
+    }
+};
+
+
+int main(int argc, char** argv){
+    clock_t start = clock();
+    Floyd floyd;
+    floyd.ReadFromFile(argv[1]);
+    cout << floyd.Solve() <<endl;
+    cout << "Elapsed time: " << ((double)clock()-(double)start)/(double)CLOCKS_PER_SEC <<endl;
+    return 0;
+}
