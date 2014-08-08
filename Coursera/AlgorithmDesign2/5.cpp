@@ -8,6 +8,8 @@
 #include<unordered_map>
 #include<ctime>
 #include<cmath>
+#include<functional>
+
 using namespace std;
 
 #define INF numeric_limits<double>::max()
@@ -16,19 +18,7 @@ class Point{
 public:
     double x,y;
 };
-
-namespace std{
-    template<>    
-    struct hash<list<int>> {
-	size_t operator() (const list<int> &l) const
-	{
-	    size_t ret = 0;
-	    for(auto i:l)
-		ret^=hash<int>() (i);
-	    return ret;
-	}
-    };
-}
+int N;
 
 #define INF numeric_limits<double>::max()
 
@@ -36,9 +26,9 @@ class TSP{
 public:
     vector<Point> points;
     vector<vector<double> > distances;
-    vector<unordered_map<list<int>,double> > memo;
-    vector<list<list<int> > > subsets;
-    int N;
+    vector<vector<vector<double> > > memo;
+    vector<vector<vector<int> > > subsets;
+
     
     void ReadFromFile(string filename){
 	ifstream input(filename);input >> N;
@@ -56,12 +46,12 @@ public:
 		distances[i][j] = sqrt(pow(points[i].x-points[j].x,2) + pow(points[i].y-points[j].y,2));
 	    }
 	}
-	list<int> curr{1};
+	vector<int> curr{1};
 	subsets.resize(N+1);
 	memo.resize(N+1);
 	GenerateSubset(2,1,curr);
 
-	list<int> temp{1,1};
+	vector<int> temp{1,1};
 	memo[1][temp]=0;
 	for(int i=2; i<=N; i++){
 	    temp.back()= i;
@@ -69,7 +59,7 @@ public:
 	}
     }
     
-    void GenerateSubset(int start, int depth, list<int>& curr){
+    void GenerateSubset(int start, int depth, vector<int>& curr){
 	subsets[depth].push_back(curr);
 	if(depth>=N)
 	    return;
@@ -83,9 +73,17 @@ public:
     void RunAlgorithm(){
 	for(int m=2; m<=N; m++){
 	    for(auto subset: subsets[m]){
-
-		for(auto i:
+		vector<int> tmp = subset;
+		tmp.push_back(1);
+		for(auto i : subset){
+		    if(i==1)
+			continue;
+		    vector<int> tmp1 = subset;
 		    
+		    for(auto j : subset){
+			if(j==i)
+			    continue;
+		    }
 		}
 	    }
 	}
@@ -106,3 +104,12 @@ int main(int argc, char** argv){
     cout << "Elapsed time: " << ((double)clock()-(double)start)/(double)CLOCKS_PER_SEC <<endl;
     return 0;
 }
+
+
+
+
+    /*
+      
+      
+     */
+											 

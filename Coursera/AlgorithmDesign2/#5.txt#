@@ -1,0 +1,6 @@
+for m=2,3,4
+    for each set in S of size m
+    	for each j in S
+	    tmp = S- {j}
+	    for each k in S
+	    	(S,j) = (tmp,k) + C_jk
