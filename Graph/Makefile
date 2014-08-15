@@ -1,4 +1,4 @@
-all:main
+all:maximumflow
 
-main:main.cpp
-	cc main.cpp
+maximumflow:maximumflow.cpp
+	clang++ -std=c++11 -o $@ $<
